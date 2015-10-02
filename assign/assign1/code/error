@@ -1,0 +1,38 @@
+evaluation.cc:24:17: error: no viable conversion from 'const std::__1::basic_string<char>' to 'int'
+            int trainKey = it->first;
+                ^          ~~~~~~~~~
+evaluation.cc:25:20: error: no viable conversion from 'int' to 'string' (aka 'basic_string<char, char_traits<char>, allocator<char> >')
+            string trainWord = it->second;
+                   ^           ~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:1326:5: note: candidate constructor not viable: no known conversion from 'int' to 'const std::__1::basic_string<char> &' for 1st argument
+    basic_string(const basic_string& __str);
+    ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:1330:5: note: candidate constructor not viable: no known conversion from 'int' to 'std::__1::basic_string<char> &&' for 1st argument
+    basic_string(basic_string&& __str)
+    ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:1335:31: note: candidate constructor not viable: no known conversion from 'int' to 'const value_type *' (aka 'const char *') for 1st argument
+    _LIBCPP_INLINE_VISIBILITY basic_string(const value_type* __s);
+                              ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:1356:5: note: candidate constructor not viable: no known conversion from 'int' to 'initializer_list<value_type>' for 1st argument
+    basic_string(initializer_list<value_type> __il);
+    ^
+evaluation.cc:39:17: error: no viable conversion from 'const std::__1::basic_string<char>' to 'int'
+            int trainKey = it->first;
+                ^          ~~~~~~~~~
+evaluation.cc:40:20: error: no viable conversion from 'int' to 'string' (aka 'basic_string<char, char_traits<char>, allocator<char> >')
+            string trainWord = it->second;
+                   ^           ~~~~~~~~~~
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:1326:5: note: candidate constructor not viable: no known conversion from 'int' to 'const std::__1::basic_string<char> &' for 1st argument
+    basic_string(const basic_string& __str);
+    ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:1330:5: note: candidate constructor not viable: no known conversion from 'int' to 'std::__1::basic_string<char> &&' for 1st argument
+    basic_string(basic_string&& __str)
+    ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:1335:31: note: candidate constructor not viable: no known conversion from 'int' to 'const value_type *' (aka 'const char *') for 1st argument
+    _LIBCPP_INLINE_VISIBILITY basic_string(const value_type* __s);
+                              ^
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1/string:1356:5: note: candidate constructor not viable: no known conversion from 'int' to 'initializer_list<value_type>' for 1st argument
+    basic_string(initializer_list<value_type> __il);
+    ^
+4 errors generated.
+make: *** [evaluation.o] Error 1

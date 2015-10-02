@@ -1,0 +1,18 @@
+\BOOKMARK [1][-]{section.1}{Probability and Statistics Review}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Exponential Families}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Maximum Likelihood Estimation}{section.1}% 3
+\BOOKMARK [1][-]{section.2}{Decision Boundary of Naive Bayes}{}% 4
+\BOOKMARK [2][-]{subsection.2.1}{Compute posterior and decision boundary}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.2}{Gaussian linear boundary}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{KNN Classification}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Question \(a\)}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Question \(b\)}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Question \(c\)}{section.3}% 10
+\BOOKMARK [1][-]{section.4}{Decision Trees}{}% 11
+\BOOKMARK [2][-]{subsection.4.1}{Decision tree on two features}{section.4}% 12
+\BOOKMARK [2][-]{subsection.4.2}{C4.5 Algorithm}{section.4}% 13
+\BOOKMARK [1][-]{section.5}{Naive Bayes}{}% 14
+\BOOKMARK [2][-]{subsection.5.1}{Result Analysis}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.2}{Running code}{section.5}% 16
+\BOOKMARK [1][-]{section.6}{Collaboration}{}% 17
+\BOOKMARK [1][-]{section.7}{Code}{}% 18

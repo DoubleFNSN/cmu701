@@ -1,0 +1,64 @@
+
+\section{Naive Bayes for sentiment classification (25 Points) (Mrinmaya)}
+The goal of this assignment is to implement a Naive Bayes classifier as described in the lecture and to apply it to the task of sentiment classification. You are free to design the code as you wish and to implement the code in any language that you wish.
+
+We will work with the following movie review data set:
+\href{http://www.cs.cornell.edu/people/pabo/movie-review-data/review_polarity.tar.gz}{http://www.cs.cornell.edu/people/pabo/movie-review-data/review\_polarity.tar.gz}
+
+The data set contains movie reviews classified as positive or negative reviews. {\color{red} We will provide standard train and test splits in the data - use reviews 000 to 799 for training and reviews 800-999 (in both pos and neg classes) for testing. Ignore the cross-validation tags. Please use this exact split only.} There are two steps to this assignment: the pre-processing step and the classification step.
+
+\subsection{Pre-processing step}
+This first step converts the movie reviews into features to be used by the naive Bayes classifier. You will be using the bag of words approach described in class. For completeness, the following steps outline the process involved:
+
+\begin{enumerate}
+\item 
+Form the vocabulary: Use all the positive and negative sentiment carrying words provided by Hu and Liu: \href{http://www.cs.uic.edu/~liub/FBS/opinion-lexicon-English.rar}{http://www.cs.uic.edu/$\sim$liub/FBS/opinion-lexicon-English.rar}\footnote{You will need to remove the header information lines from the files positive-words.txt and negative-words.txt} as the vocabulary. The words in the vocabulary will form the feature set. You may want to keep the vocabulary in alphabetical order to help you with debugging your assignment, but this is not necessary.
+
+\item Now, convert the training data into a set of features. Let $M$ be the size of your vocabulary. For each review, you will convert it into a feature vector of size $M$. Each slot in that feature vector takes the value of 0 or 1. If the $i^{th}$ slot is 1, it means that the $i^{th}$ word in the vocabulary is present in the review; otherwise, if it is 0, then the $i^{th}$ word is not present in the review. Most of the feature vector slots will be 0 so it will be efficient if you only store the indices that have 1's.
+\end{enumerate}
+
+\subsection{Classification step}
+
+Build a naive Bayes classifier as described in class.
+\begin{enumerate}
+\item In the first phase, which is the training phase, the naive Bayes classifier reads in the training data along with the training labels and learns the parameters used by the classifier.
+
+\item In the testing phase, the trained naive Bayes classifier classifies the data in the testing data file. You will need to convert the reviews in the testing data into a feature vector, just like in the training data where a 1 in the $i^{th}$ slot indicates the presence of the $i^{th}$ word in the vocabulary while a 0 indicates the absence. If you encounter a word in the testing data that is not present in your vocabulary, ignore that word.
+
+\item Output the accuracy of the naive Bayes classifier by comparing the predicted class label of each review in the testing data to the actual class label. The accuracy is the number of correct predictions divided by the total number of predictions.
+\end{enumerate}
+
+Note: Make sure that you follow the implementation hints given in the lecture. Specifically, you may want to do the probability calculations in log space to prevent numerical instability. Also, {\color{red} use laplace prior of 0.1 (also called ``add 0.1 smoothing'') to avoid zero probabilities}.
+
+\subsection{Results}
+Your results must be reported in a write-up (to be attached with the written component of this assignment).
+
+(a) Train Accuracy: Run your classifier by training on the training split and then testing on training split itself. Report the accuracy. In this situation, you are training and testing on the same data. This is a sanity check: your accuracy should be fairly high.
+
+(b) Test Accuracy: Run your classifier by training on the training split and then testing on testing split. Report the accuracy. Are you over-fitting?
+
+(c) Most sentiment carrying words: For both positive and negative classes, print top 10 words i.e. words that have highest $p(word|sentiment=positive)$ and $p(word|sentiment=negative)$.
+
+\subsection{Experiment with your code}
+Now, we will play around with the code a little bit and try to boost up the classifier accuracy if we can.
+
+{\bf Negation Handling:}
+A major problem faced during the task of sentiment classification is that of handling negations. Since we are using each word as feature, the word ``good'' in the phrase ``not good'' will be contributing to positive sentiment rather that negative sentiment as the presence of ``not'' before it is not taken into account. To mitigate this, we will introduce a simple fix - for all words preceded by a not or n't in the training set, introduce a new feature called
+``not\_'' + word. Add these features to the ones included in the vocabulary you used above.
+
+Perform negation handling and report Train and Test Accuracy on the data set as before. Are you over-fitting? Does your accuracy increase? Why or Why not? Explain in your report.
+
+{\bf Including Bi-grams:}
+Often, information about sentiment is conveyed by adjectives or more specifically by certain combinations of adjectives with other parts of speech. This information can be captured by adding features like consecutive pairs of words (also called bi-grams) where the first word is an adverb of degree and the second word is a sentiment carrying word. Words like ``very'' or ``definitely'' don't provide much sentiment information on their own, but phrases like ``very bad'' or ``definitely recommended'' increase the probability of a document being negatively or positively biased. To utilize this we will add some more bi-grams to our vocabulary. Specifically, we will add all pairs where the first word is one of the following seven adverbs: ``extremely'', ``quite'', ``just'', ``almost'', ``very'', ``too'', ``enough'', and the second word is any word in the original vocabulary  you used above.
+
+Perform bi-gram inclusion and report Train and Test Accuracy on the data set as before. Are you over-fitting? Does your accuracy increase? Why or Why not? Explain in your report.
+
+\subsection{Extra Credit (5 Points)}
+Now that you have your cool Sentiment classifier ready, try to improve it a little more and earn a bonus of 5 more points.
+
+One idea to do this is to allow a vocabulary of all words in your training set (do not use the Hu and Liu vocabulary), perform negation handling and include all bi-grams (all consecutive words in the training set) to your vocabulary. The use of higher dimensional features like all possible bi-grams will result in a blow up in the number of features. So it might be useful to down select our features. While we have not covered feature selection in class, you are encouraged to read up on these and implement one. Our suggestion is to do ``Forward Greedy Selection'' but you are free to implement one of your choice.
+
+Describe your feature selector. How many features did you finally select? Why? Report your Train and Test Accuracy on the data set as before. Are you over-fitting now? Does your accuracy increase? Why or Why not? Explain in your report.
+
+\subsection{Submission Requirements}
+You are required to submit your code as well as your report. Attach your report with the written component of the assignment. 
