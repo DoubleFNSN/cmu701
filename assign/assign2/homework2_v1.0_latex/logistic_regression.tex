@@ -1,0 +1,28 @@
+\section{Multinomial Logistic Regression (20 Points) (Yan)}
+
+Multinomial logistic regression is a classification method that generalizes logistic regression to multiclass problems. It has the form
+\begin{align}
+p\bb{y = c \mid \xv, \Wv} = \frac{\exp\bb{w_{c0} + \wv_c\T \xv} }{\sum_{k=1}^{C} \exp\bb{w_{k0} + \wv_k\T \xv}},
+\end{align}
+where $C$ is the number of classes, and $\Wv$ is a $C \times (d+1)$ weight matrix, and $d$ is the dimension of input vector $\xv$. In other words, $\Wv$ is a matrix whose rows are the weight vectors for each class.
+
+\begin{enumerate}
+\item Show that in the special case where $C = 2$, the multinomial logistic regression reduces to logistic regression.
+
+\item In the training process of the the multinomial logistic regression model, we are given a set of training data $\cbb{\xv_i, y_i}_{i=1}^n$, and we want to learn a set of weight vectors that maximize the conditional likelihood of the output labels $\cbb{y_i}_{i=1}^n$, given the input data $\cbb{\xv_i}_{i=1}^n$ and $\Wv$. That is, we want to solve the following optimization problem (assuming the data points are \textit{i.i.d}).
+\begin{align}
+\Wv^\star = \argmax_{\Wv} \prod_{i=1}^n P(y_i \mid \xv_i, \Wv)
+\end{align}
+
+In order to solve this optimization problem, most numerical solvers require that we provide a function that computes the objective function value given some weight and the gradient of that objective function (\ie, its first derivative). Some solvers usually also require the Hessian of the objective function (\ie, its second derivative). So, in order to implement the algorithm we need to derive these functions.
+
+\begin{enumerate}
+\item Derive the conditional log-likelihood function for the multinomial logistic regression model. You may denote this function as $\ell(W)$.
+
+\item Derive the gradient of $\ell(W)$ with respect to the weight vector of class $c$ ($\wv_c$). That is, derive $\nabla_{\wv_c} \ell(W)$. You may denote this function as gradient $g_c(W)$. Note: The gradient of a function $f(\xv)$ with respect to a vector $\xv$ is also a vector, whose $i$-th entry is defined as $\frac{\partial f(\xv)}{\partial x_i}$, where $x_i$ is the $i$-th element of $\xv$.
+
+\item Derive the block submatrix of the Hessian with respect to weight vector of class $c$ ($\wv_c$) and class $c'$ ($\wv_{c'}$). You may denote this function as $H_{c,c'}(\Wv)$. Note: The Hessian of a function $f(\xv)$ with respect to vector $\xv$ is a matrix, whose $\cbb{i, j}$th entry is defined as $ \frac{\partial^2 f(\xv)}{\partial x_i \partial x_j} $. In this case, we are asking a block submatrix of Hessian of the conditional log-likelihood function, taken with respect to only two classes $c$ and $c'$. The $\cbb{i, j}$th entry of the submatrix is defined as $ \frac{\partial^2 \ell(\Wv)}{\partial w_{ci} \partial w_{c'j}} $.
+\end{enumerate}
+
+\end{enumerate}
+

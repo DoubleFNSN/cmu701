@@ -1,0 +1,27 @@
+\section{Regularized Linear Regression Using Lasso (20 Points) (Yan)}
+
+Lasso is a form of regularized linear regression, where the L1 norm of the parameter vector is penalized. It is used in an attempt to get a sparse parameter vector where features of little ``importance'' are assigned to zero weight. But why does lasso encourage sparse parameters? For this question, you are going to examine this.
+
+Let $\Xv$ denote an $n \times d$ matrix where rows are training points, $\yv$ denotes an $n \times 1$ vector of corresponding output value, $\wv$ denotes a $d \times 1$ parameter vector and $\wv^\star$ denotes the optimal parameter vector. To make the analysis easier we will consider the special case where the training data is whitened (\ie, $X\T X = I$). For lasso regression, the optimal parameter vector is given by
+\begin{align}
+\wv^\star = \argmin_{\wv} \half \norm{\yv - X\wv}^2 + \lambda \norm{\wv}_1,
+\end{align}
+where $\lambda > 0$.
+
+\begin{enumerate}
+\item  Show that whitening the training data nicely decouples the features, making $\wv_i^\star$ determined by the $i$th feature and the output regardless of other features. To show this, write $J_\lambda (\wv)$ in the form
+\begin{align}
+J_\lambda (\wv) = g(\yv) + \sum_{i=1}^d f\bb{ X_{\cdot i}, \yv, w_i, \lambda},
+\end{align}
+where $X_{\cdot i}$ is the $i$th column of $X$.
+
+\item Assume that $w_i^\star > 0$, what is the value of $w_i^\star$ in this case? \label{greater}
+
+\item Assume that $w_i^\star < 0$, what is the value of $w_i^\star$ in this case? \label{less}
+
+\item From \ref{greater} and \ref{less}, what is the condition for $w_i^\star$ to be 0? How can you interpret that condition? \label{lasso_cond}
+
+\item Now consider ridge regression where the regularization term is replaced by $\half\lambda\norm{\wv}_2^2$. What is the condition for $w_i^\star = 0$? How does it differ from the condition you obtained in \ref{lasso_cond}?
+
+\end{enumerate}
+

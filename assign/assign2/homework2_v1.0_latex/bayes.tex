@@ -1,0 +1,31 @@
+\section{Bayes Optimal Classification (20 Points) (Yan)}
+
+In classification, the loss function we usually want to minimize is the 0/1 loss:
+\begin{align}
+\ell\bb{f(x), y} = \one\cbb{f(x) \neq y}
+\end{align}
+where $f(x), y \in \cbb{0, 1}$ (\ie, binary classification). In this problem we will consider the effect of using an asymmetric loss function:
+\begin{align}
+\ell_{\alpha, \beta} \bb{f(x), y} = \alpha \one \cbb{f(x) = 1, y = 0} + \beta \one \cbb{{f(x) = 0, y = 1}}.
+\end{align}
+Under this loss function, the two types of errors receive different weights, determined by $\alpha, \beta > 0$.
+
+\begin{enumerate}
+\item Determine the Bayes optimal classifier, \ie, the classifier that achieves minimum risk assuming $P(x, y)$ is known, for the loss $\ell_{\alpha, \beta}$ where $\alpha, \beta > 0$.
+
+\item Suppose that the class $y = 0$ is extremely uncommon (\ie, $P(y = 0)$ is small). This means that the classifier $f(x) = 1$ for all $x$ will have good risk. We may try to put the two classes on even footing by considering the risk:
+\begin{align}
+R = P\bb{f(x) = 1 \mid y = 0} + P\bb{f(x) = 0 \mid y = 1}.
+\end{align}
+Show how this risk is equivalent to choosing a certain $\alpha, \beta$ and minimizing the risk where the loss function is $\ell_{\alpha, \beta}$.
+
+\item Consider the following classification problem. I first choose the label $Y \sim \ber{\half}$, which is 1 with probability $\half$. If $Y = 1$, then $X \sim \ber{p}$; otherwise, $X \sim \ber{q}$. Assume that $p > q$. What is the Bayes optimal classifier, and what is its risk?
+
+\item Now consider the regular 0/1 loss $\ell$, and assume that $P(y=0) = P(y=1) = \half$. Also, assume that the class-conditional densities are Gaussian with mean $\mu_0$ and co-variance $\Sigma_0$ under class 0, and mean $\mu_1$ and co-variance $\Sigma_1$ under class 1. Further, assume that $\mu_0 = \mu_1$.
+
+For the following case, draw contours of the level sets of the class conditional densities and label them with $p(x\mid y = 0$ and $p(x\mid y=1)$. Also, draw the decision boundaries obtained using the Bayes optimal classifier in each case and indicate the regions where the classifier will predict class 0 and where it will predict class 1.
+\begin{align}
+\Sigma_0 = \begin{bmatrix} 1 & 0 \\ 0 & 4 \end{bmatrix}, \Sigma_1 = \begin{bmatrix} 4 & 0 \\ 0 & 1 \end{bmatrix}.
+\end{align}
+
+\end{enumerate}

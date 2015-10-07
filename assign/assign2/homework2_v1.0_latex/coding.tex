@@ -1,0 +1,113 @@
+
+\section{Logistic Regression for Image Classification (20 Points) (Xun)}
+
+In this problem, we will implement (almost) from scratch logistic regression for image classification. 
+We will use MNIST (\href{http://yann.lecun.com/exdb/mnist/}{\tt http://yann.lecun.com/exdb/mnist/}),  which contains in total 70,000 handwritten digits from $ 0 $ to $ 9 $. 
+Although initially released in 1998, MNIST is still one of the most widely used benchmark data sets for image classification. 
+
+\subsection{Exploring the data}
+It is often a good practice to take a careful look at the data before modeling.
+Run {\tt download\_mnist.sh} and {\tt visualize\_mnist.m},
+and explore the following properties of {\tt images} and {\tt labels}:
+\begin{enumerate}
+\item size of each image
+\item range of labels 
+\item range of pixel values
+\item maximum and minimum $ \ell_2 $-norm of the images
+\item whether the data is sparse or dense
+\item whether the label distribution is skewed or uniform
+\end{enumerate}
+Please append your code to {\tt visualize\_mnist.m}.
+
+
+\subsection{Binary logistic regression}
+
+Let's start with a simple binary logistic regression for classifying ONLY between the digits $3$ and $8$. 
+In {\tt lr.m} we have outlined the training and testing process, as well as 
+some preprocessing routines, such as selecting $ 3 $'s and $ 8 $'s and normalizing data to have zero mean and unit variance. 
+Your goal is to perform the following steps: 
+
+\begin{enumerate}
+\item 
+Complete the function {\tt s = sigmoid(a)}. 
+Note that {\tt a} and {\tt s} could be vectors. 
+
+\item 
+Complete the function {\tt [f, g] = oracle\_lr(w, X, y)},
+where $ w $ is the weight vector, 
+$ X $ is the set of images, and $ y $ is the set of labels. 
+This function returns the objective $ f $ and the gradient $ g $. 
+
+\item Complete the function {\tt err = grad\_check(oracle, t)}. 
+This will help you check if the oracle implementation is correct. 
+First recall the definition of derivatives:
+\begin{align}
+g(t)
+= \lim\limits_{h \to 0} \frac{f(t + h) - f(t)}{h}.
+\end{align}
+The idea is to check analytic gradients against numerical gradients. 
+For a small $ h $, say $ h \approx 10^{-6} $, 
+the numerical estimate
+\begin{align}
+\widehat{g}_j (t)
+= \frac{f(t+h \ev_j) - f(t-h\ev_j)}{2h}
+\approx g_j(t), 
+\end{align} 
+for all $ j \in \cbb{1,\dotsc, d} $, where $ \ev_j $ is the unit vector at $ j $-th coordinate. 
+If the oracle is implemented correctly, then we should expect small (\eg $ \approx 10^{-6} $) average error 
+\begin{align}
+{\rm err} 
+= \frac{1}{d} \sum_{j=1}^{d} \abs{\widehat{g}_j (t) - g_j (t)}.
+\end{align}
+
+Try running {\tt oracle\_lr\_test.m} to see if your oracle can pass the test.
+
+
+\item 
+Complete the function {\tt w = optimize\_lr(w0, X, y)}, 
+where $ w_0 $ is the initial value. 
+You will implement a simple gradient descent/ascent algorithm to find the best parameter $ w $. 
+
+\item 
+Complete the function {\tt acc = binary\_accuracy(w, X, y)}. 
+This function returns the fraction of correct predictions of classifier $ w $ on data $ X $. 
+
+\item 
+Run {\tt lr.m}, report the number of iterations, final objective function value, final $ \norm{w}_2^2 $, training accuracy, and test accuracy.
+You should be able to get $ \ge 95\% $ test accuracy. 
+
+\item 
+Modify {\tt oracle\_lr.m} to return $ \ell_2 $-regularized objective and  gradient, with tuning parameter $ \lambda $.
+Specifically, add/subtract $ \frac{\lambda}{2} \norm{w}_2^2 $ to the objective, depending on whether the objective is log-likelihood or negative log-likelihood.
+Report the number of iterations, final objective function value, final $ \norm{w}_2^2 $, training accuracy, and test accuracy.
+Briefly summarize your observation. 
+
+(Note: you can check your implementation again with {\tt oralce\_lr\_test.m}.)
+
+\end{enumerate}
+
+
+
+\subsection{Multiclass logistic regression}
+
+Now let's learn a classifier for ALL digits using multiclass logistic regression derived above. 
+Again we have the algorithm outline and preprocessing in {\tt mlr.m}.
+Notice that the labels are now shifted by 1, so that they are 1-indexed. 
+Your goal is to perform the following steps:
+
+
+\begin{enumerate}
+\item Complete the function {\tt [f, g] = oracle\_mlr(W0, X, y)}. 
+In particular, implement $ \ell_2 $-regularization for each class, again with $ \lambda $ being the tuning parameter, \ie include $ \frac{\lambda}{2} \norm{\Wv}_F^2 $ in your objective. 
+
+(Note: you can check your implementation with {\tt oralce\_mlr\_test.m}.)
+
+\item Complete the function {\tt W = optimize\_mlr(W0, X, y)}.
+
+\item Complete the function {\tt acc = multiclass\_accuracy(W, X, y)}. 
+
+\item Run {\tt mlr.m}, report the number of iterations, final objective function value, final $ \norm{\Wv}_F^2 $, training accuracy, and test accuracy. 
+Also include the visualization of the learned weights. 
+For this task you should be able to get $ \ge 92\% $ test accuracy. 
+
+\end{enumerate}

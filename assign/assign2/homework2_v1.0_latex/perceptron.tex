@@ -1,0 +1,29 @@
+\section{Perceptron Mistake Bounds (20 Points) (Xun)}
+
+\newcommand{\tth}{^{(t)}}
+
+Suppose $ \cbb{(\xv_i, y_i): \xv_i \in \Rb^n, y_i \in \cbb{+1, -1}, i = 1,\dotsc,m} $ can be linearly separated by a margin $ \gamma > 0 $, 
+\ie 
+\begin{align}
+\exists \wv \in \Rb^n \st \| \wv \|_2 = 1, \ \inner{y_i \xv_i, \wv} \ge \gamma, \ \forall i = 1,\dotsc,m,
+\end{align}
+where $ \inner{a,b} = a\t b $ is the dot product between two vectors. 
+Further assume $ \| \xv_i \|_2 \le M, \ \forall i $.
+Recall that Perceptron algorithm starts from $ \wv^{(0)} = \zero $
+and updates
+$ \wv\tth = \wv^{(t-1)} + y\tth \xv\tth $, where $ (\xv\tth, y\tth) $ is the $ t $-th misclassified example.
+We will prove that Perceptron learns an exact classifier in finitely many steps. 
+
+\begin{enumerate}
+\item Show that $ \inner{\wv\tth, \wv} \ge t \gamma $.
+
+\item Show that $ \| \wv\tth \|_2^2 \le t M^2. $
+
+\item Use the results above, show that number of updates $ t $ is upper bounded by  $ M^2 / \gamma^2. $
+
+\item True or False: when zero error is achieved, the classifier always has margin $ \gamma $. 
+Explain briefly. 
+
+\end{enumerate}
+
+
