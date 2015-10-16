@@ -1,0 +1,22 @@
+\section{Probability and Statistics Review (25 Points) (Mrinmaya)}
+\subsection{Exponential Families}
+Many commonly used distributions in Statistics and Machine Learning fall under the category of Exponential Family of distributions. Exponential family is a set of probability distributions whose probability density function (or probability mass function, if discrete) can be expressed in the form: $f_X(x) = h(x) \exp \left (\eta(\theta) \cdot T(x) -A(\theta)\right )$ where $T(x)$, $h(x)$, $\eta(\theta)$, and $A(\theta)$ are known.
+
+(a) Show that Multinomial distribution, Multi-variate Gaussian distribution and Dirichlet distribution are members of the exponential family.
+
+(b) Consider dataset $D=\{x_i\}_{i=1}^N$ which is independently and identically distributed (i.i.d.) according to some known exponential family distribution $f(x|\boldsymbol\theta) = h(x) \exp \left ( {\boldsymbol\theta}^{\rm T}\mathbf{T}(x) -A(\boldsymbol\theta)\right )$. Let the prior for the parameter $\boldsymbol\theta$ be given by
+$p_\pi(\boldsymbol\theta|\boldsymbol\chi,\nu) = f(\boldsymbol\chi,\nu) \exp \left (\boldsymbol\theta^{\rm T} \boldsymbol\chi - \nu A(\boldsymbol\theta) \right )$. Compute the posterior and show that it takes the same form as the prior.
+
+Note: This notion is called ``Conjugacy'' and this will be very useful in Bayesian modelling.
+
+\subsection{Maximum Likelihood Estimation}
+We learnt about Maximum Likelihood estimation in class. For a fixed set of data and underlying statistical model, the method of maximum likelihood selects the set of values of the model parameters that maximises the likelihood function.
+
+(a) Consider the model where the data $D=\{x_i\}_{i=1}^N$ is i.i.d. according to some known exponential family distribution. Further, let $\eta(\theta) = \theta$. Show that the maximum likelihood solution is given by: $A'(\hat\theta_{ML}) = \frac{1}{N}\sum\limits_i T(x_i)$
+
+(b) Now, consider the special case where the data is i.i.d according to the uniform distribution: $x_i \sim \textit{uniform}(0, \theta)$ i.e. $p(x_i|\theta) = \begin{cases} 
+\frac{1}{\theta} & x_i \in [0, \theta] \\ 
+0 & \textit{otherwise}
+\end{cases}$
+
+Now, compute the maximum likelihood estimator $\hat\theta_{ML}$.

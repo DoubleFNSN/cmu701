@@ -10,6 +10,9 @@ max_iter = 1000;
 w = w0;
 f_prev = 0;
 
+g_prev = zeros(size(w));
+g = zeros(size(w));
+
 fprintf('%16s iter %16s f %16s eps %16s ||w||^2\n', '', '', '', '');
 for k = 1:max_iter
 
@@ -19,6 +22,9 @@ for k = 1:max_iter
   %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+  [f,g] = oracle_lr(w, X, y);
+  w = w + step*g;
+  
   eps = abs((f - f_prev) / f_prev);
   fprintf('%21d %18g %20g %24g\n', k, f, eps, dot(w,w));
   if eps <= 1e-4

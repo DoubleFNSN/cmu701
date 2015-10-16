@@ -19,6 +19,9 @@ for k = 1:max_iter
   %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+  [f, g] = oracle_mlr(W, X, y);
+  W = W + step * g;
+  
   eps = abs((f - f_prev) / f_prev);
   fprintf('%21d %18g %20g %24g\n', k, f, eps, sum(sum(W.^2)));
   if eps <= 1e-4
