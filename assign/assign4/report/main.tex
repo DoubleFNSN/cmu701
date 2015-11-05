@@ -1,0 +1,580 @@
+\documentclass{article} % For LaTeX2e
+\usepackage{nips15submit_e,times}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+%\documentstyle[nips14submit_09,times,art10]{article} % For LaTeX 2.09
+
+
+\title{Problem Set 4 for Machine Learning 15 Fall}
+
+
+\author{
+Jingyuan Liu\\
+AndrewId: jingyual\\
+\texttt{jingyual@andrew.cmu.edu} \\
+}
+
+
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\inner}[1]{\left\langle #1 \right\rangle}
+
+
+\nipsfinalcopy % Uncomment for camera-ready version
+
+
+\begin{document}
+\maketitle
+
+
+
+\section{Neural Networks}
+
+
+For convenience, we can denote the nodes in the first layer as $n_1, n_2$, the
+second layer $n_3$.
+
+\subsection{Neural network for regression}
+\textbf{1.1.1. Simulating linear regression}
+
+In this scenario, every node should use L.
+
+\begin{equation}
+n_1 = c(x_1 w_1 + x_2 w_3), \quad
+n_2 = c(x_1 w_2 + x_2 w_4)
+\end{equation}
+
+\begin{equation}
+y = c n_3 =  c(n_1 w_5 + n_2 w_6)
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \qquad \quad
+= c^2 ((x_1 w_1 + x_2 w_3) w_5 + (x_1 w_2 + x_2 w_4) w_6)
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \qquad \quad
+= c^2 (w_1 w_5 + w_2 w_6) x_1 + c^2 (w_3 w_5 + w_4 w_6) x_2
+\end{equation}
+
+\begin{equation}
+\beta_1 = c^2 (w_1 w_5 + w_2 w_6),  \quad
+\beta_2 = c^2 (w_3 w_5 + w_4 w_6)
+\end{equation}
+
+\textbf{1.1.2. Derive $\beta_1$ and $\beta_2$}
+
+In this scenario, $n_1$ and $n_2$ should use L, and $n_3$ should use S.
+
+\begin{equation}
+n_1 = c(x_1 w_1 + x_2 w_3), \quad
+n_2 = c(x_1 w_2 + x_2 w_4)
+\end{equation}
+
+\begin{equation}
+p(n_3 = 1 \mid X) = \frac{1}{1 + exp(-(n_1 w_5 + n_2 w_6))}
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \quad = \frac{exp(n_1 w_5 + n_2 w_6)}{1 + exp(n_1 w_5 + n_2 w_6)}
+\end{equation}
+
+According to the defination of S, we know that the Y = 1 when $n_3$ = 1, and Y = -1
+when $n_3$ = 0. Therefore, we can derive that:
+
+\begin{equation}
+P(Y=1 \mid X) = p(n_3 = 1 \mid X) = \frac{exp(n_1 w_5 + n_2 w_6)}
+{1 + exp(n_1 w_5 + n_2 w_6)}
+\end{equation}
+
+\begin{equation}
+\beta_1 = c (w_1 w_5 + w_2 w_6),  \quad
+\beta_2 = c (w_3 w_5 + w_4 w_6)
+\end{equation}
+
+\textbf{1.1.3. Derive $\alpha_1$ and $\alpha_2$}
+
+In this scenario, $n_1$, $n_2$, and $n_3$ all should use S. For f1
+and f2, they employ the same distribution as 1.1.2, so:
+
+\begin{equation}
+p(Y_1=1 \mid X, f1) = p (n_1=1 \mid x)
+= \frac{exp(w_1 x_1 + w_3 x_2)}{1 + exp(w_1 x_1 + w_3 x_2)}
+\end{equation}
+
+\begin{equation}
+p(Y_2=1 \mid X, f2) = p (n_2=1 \mid x)
+= \frac{exp(w_2 x_1 + w_4 x_2)}{1 + exp(w_2 x_1 + w_4 x_2)}
+\end{equation}
+
+For $n_3$ and Y, we have:
+
+\begin{equation}
+n_3 = \frac{1}{1 + exp(n_1 w_5 + n_2 w_6)}, \quad
+y = sign(\alpha_1 Y_1 + \alpha_2 Y_2)
+\end{equation}
+
+\begin{equation}
+\alpha_1 = w_5, \quad
+\alpha_2 = w_6
+\end{equation}
+
+
+\subsection{Convolutional Neural Networks}
+
+\textbf{1.2.1 Parameters}
+
+For the convolution layers, we have:
+
+6 * (25 + 1) + (6 * 25 + 1) * 16 = 2572
+
+For the fully connected layers, we have:
+
+(1 + 16 * 5 * 5) * 120 + (120 + 1) * 84 + (84 + 1) * 10 = 59134
+
+\textbf{1.2.2 Derive the gradients}
+
+The gradient is:
+
+\begin{equation}
+\frac{\partial L}{\partial w_i^{(q)}} = 
+\sum_{i=1}^{J^{(q)}} \frac{\partial L}{\partial z_j^{(q)}}
+\frac{\partial z_j^{(q)}}{\partial w_i^{(q)}}
+\end{equation}
+
+\begin{equation}
+\qquad =
+\sum_{i=1}^{J^{(q)}} \frac{\partial L}{\partial z_j^{(q)}}
+\sigma' (\sum_i w_i^{(q)} x_{ji}^{(q)}) x_{ji}^{(q)}
+\end{equation}
+
+Here $\sigma$ is the activation function.
+
+
+\subsection{Gradient vanishing/explosion}
+
+\textbf{1.3.1 Derive b1, the first layer bias}
+
+We can derive the derivative of L w.r.t. b1 using the chain rule:
+
+\begin{equation}
+\frac{\partial L}{\partial b_1} =
+\frac{\partial L}{\partial z_m} \frac{\partial z_m}{\partial z_{m-1}} ...
+\frac{\partial z_{2}}{\partial z_{1}} \frac{\partial z_{1}}{\partial b_1}
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad
+= \frac{\partial L}{\partial z_m}
+\cdot \sigma' (w_1 x + b_1)
+\cdot \prod_{k=1}^m \frac{\partial z_{k+1}}{\partial z_k}
+\end{equation}
+
+\newpage
+\textbf{1.3.2. (a) explain vanish trend}
+
+As the activation function is given, we can derive:
+
+\begin{equation}
+\frac{\partial z_{k+1}}{\partial z_k} =
+\frac{\partial \sigma (w_k z_k + b_k)}{\partial (w_k z_k + b_k)}
+\cdot \frac{\partial (w_k z_k + b_k)}{\partial z_k}
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad =
+\sigma (w_k z_k + b_k) (1- \sigma (w_k z_k + b_k))
+\cdot w_k
+\end{equation}
+
+As we know, $\sigma (x)$ and $1-\sigma (x)$ is smaller than 1, and $\abs{w_k}$
+is smaller than 1. Therefore, according what we derived from 1.3.1, we would
+konw that the $\frac{\partial L}{\partial b_1}$ tends to vanish when m is large.
+
+\textbf{1.3.2. (b) explain vanish trend given large $\abs{w}$}
+
+Given the form of the $\frac{\partial z_{k+1}}{\partial z_k}$, we can simple
+consider this function:
+
+\begin{equation}
+f_{temp} = \frac{x \cdot exp(x)}{ (1+exp(x))^2}
+\end{equation}
+
+which is the same ``form'' of the derivative. As we can see, with increase of x,
+the $f_{temp}$ would become smaller and would be smaller than 1. The trend of
+$\frac{\partial z_{k+1}}{\partial z_k}$ is the same. When the $\abs{w}$ is
+large, the total $\frac{\partial z_{k+1}}{\partial z_k}$ would still be smaller
+than 1, because the decreasing trend of
+$\sigma (w_k z_k + b_k) (1- \sigma (w_k z_k + b_k))$ would be more influential
+than the increasing trend of $w_k$.
+
+\textbf{1.3.3. Explain the ReL}
+
+We could find that when $x > 0$:
+
+\begin{equation}
+\frac{\partial \sigma (x)}{\partial x} = 1
+\end{equation}
+
+Then in this case, we know that the parameters would vanish as the sigmoid
+function.
+
+\textbf{1.3.4. Prove the equation}
+
+From the equation, we can derive:
+
+\begin{equation}
+\frac{\partial log p(v)}{\partial \theta_i} =
+\frac{\partial log \sum_h p(v, h)}{\partial \theta_i}
+\end{equation}
+
+\begin{equation}
+log \sum_h p(v,h) = log \sum_h exp(\sum_i \theta_i \phi_i (v,h))
+- log (\sum_{v,h} exp (\sum_i \theta_i \phi_i (v,h)))
+\end{equation}
+
+For simplicity, we can use $\phi_i$ to replace $\phi_i (v,h)$,
+the first part and second part:
+
+\begin{equation}
+\frac{\partial log \sum_h p(v,h)}{\partial \theta_i} =
+\frac{1}{\sum_h exp(\sum_i \theta_i \phi_i)} \cdot
+\frac{\partial \sum_h exp(\sum_i \theta_i \phi_i)}{\partial \theta_i} \cdot
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \quad =
+\frac{1}{\sum_h exp(\sum_i \theta_i \phi_i)} \cdot
+\sum_h exp(\sum_i \theta_i \phi_i) \cdot \phi_i
+\end{equation}
+
+\begin{equation}
+= \sum_h \phi_i \frac{exp(\sum_i \theta_i \phi_i)}
+{\sum_h exp(\sum_i \theta_i \phi_i)}
+\end{equation}
+
+Using bayes rule, we can derive the first part as:
+
+\begin{equation}
+p (h \mid v) = \frac{p(v,h)}{p(v)} = \frac{p(v,h)}{\sum_h p(v,h)}
+\end{equation}
+
+\begin{equation}
+\qquad = 
+\frac{exp(\sum_i \theta_i \phi_i)}{\sum_h exp(\sum_i \theta_i \phi_i)}
+\end{equation}
+
+\begin{equation}
+\frac{\partial log \sum_h p(v,h)}{\partial \theta_i} =
+\sum_h \phi(v,h) p (h \mid v)
+\end{equation}
+
+We can similarily derive the second part:
+
+\begin{equation}
+\frac{\partial \sum_{v,h} exp(\sum_i \theta_i \phi_i)}{\partial \theta_i}
+= \frac{1}{Z} \cdot \frac{\partial \sum_{v,h} exp(\sum_i \theta_i \phi_i)}
+{\partial \theta_i}
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \quad = 
+\sum_{v,h} \phi_i \frac{exp(\sum_i \theta_i \phi_i)}{Z} 
+\end{equation}
+
+\begin{equation}
+\qquad \qquad = 
+\sum_{v,h} \phi_i p(v,h)
+\end{equation}
+
+Combine the two parts, we can get the conclusion:
+
+\begin{equation}
+\frac{\partial log p(v)}{\partial \theta_i} = \sum_h \phi_i (v,h) p(h \mid v)
+- \sum_{v,h} \phi_i (v,h) p(v,h)
+\end{equation}
+
+
+
+\section{Support Vector Machines}
+
+
+\subsection{Support Vector Regression}
+
+\textbf{2.1.1. write the dual problem}
+
+Suppose we have $\xi_i$ ofr each $x_i$:
+
+\begin{equation}
+\abs{f(x) - y} < \epsilon
+\end{equation}
+
+\begin{equation}
+- \epsilon  < w^T x_i - y_i < \epsilon
+\end{equation}
+
+Let's set:
+
+\begin{equation}
+\abs{w^T x_i - y_i} - \epsilon = \xi_i
+\end{equation}
+
+\begin{equation}
+L = \frac{1}{2} \norm{w}_2^2 + C \sum_{i=1} \xi_i 
+- \sum_i \alpha_i (\epsilon + \xi_i - y_i + w x_i)
+- \sum_i \alpha_i^{\star} (\epsilon + \xi_i +y_i - w x_i)
+- \sum_i \beta_i \xi_i
+\end{equation}
+
+\begin{equation}
+\alpha_i >= 0, \alpha_i^{\star} >= 0, \beta_i >= 0
+\end{equation}
+
+We have to satisfy saddle constraints condition, so
+
+\begin{equation}
+\partial_w L = w - \sum_i (\alpha_i - \alpha_i^{\star}) x_i = 0
+\end{equation}
+
+\begin{equation}
+\partial_{\xi_i} L = C - \alpha_i -\alpha_i^{\star} - \beta_i = 0
+\end{equation}
+
+Take the the conditions back and we can get the form of dual problem of SVR:
+
+\begin{equation}
+maximize: - \frac{1}{2} \sum_{i,j=1} (\alpha_i - \alpha_i^{\star})
+(\alpha_j - \alpha_j^{\star}) x_i^T x_j
+- \epsilon \sum_i (\alpha_i + \alpha_i^{\star})
++ \sum_i y_i (\alpha_i - \alpha_i^{\star})
+\end{equation}
+
+\begin{equation}
+subject \quad to: \sum_i (\alpha_i - \alpha_i^{\star}) = 0, \qquad
+\alpha_i, \alpha_i^{\star} \in [ 0, C]
+\end{equation}
+
+
+\textbf{2.1.2. KKT Conditions}
+
+The KKT condition for this problem is:
+
+\begin{equation}
+\partial_w L = w - \sum_i (\alpha_i - \alpha_i^{\star}) x_i = 0
+\end{equation}
+
+\begin{equation}
+\partial_{\xi_i} L = C - \alpha_i -\alpha_i^{\star} - \beta_i = 0
+\end{equation}
+
+\begin{equation}
+\epsilon + \xi_i - y_i + w^T x_i >= 0
+\end{equation}
+
+\begin{equation}
+\epsilon + \xi_i^{\star} + y_i - w^T x_i >= 0
+\end{equation}
+
+\begin{equation}
+\alpha_i >= 0, \alpha_i^{\star} >= 0, \beta_i >=0
+\end{equation}
+
+\begin{equation}
+\alpha_i (\epsilon + \xi_i - y_i + w^T x_i) = 0
+\end{equation}
+
+\begin{equation}
+\alpha_i^{\star} (\epsilon + \xi_i^{\star} + y_i - w^T x_i) = 0
+\end{equation}
+
+\textbf{2.1.3. Kernelized SVR}
+
+The prediction rule is:
+
+\begin{equation}
+w = \sum_i (\alpha_i - \alpha_i^{\star}) x_i
+\end{equation}
+
+\begin{equation}
+f(x) = \sum_i (\alpha_i - \alpha_i^{\star}) x_i^T x
+\end{equation}
+
+Add we can use kernel to transfer the x, therefore:
+
+\begin{equation}
+f(x_j) = \sum_i (\alpha_i - \alpha_i^{\star}) K(x_i, x_j)
+\end{equation}
+
+\textbf{2.1.4. Why using SVR primal}
+
+
+We are using the primal of SVM and the dual of SVR, this is because we want to
+compose the term:
+
+\begin{equation}
+\sum_i x_i x
+\end{equation}
+
+Therefore, we could use the kernel trick to implicitly transfer the feature of
+the data to other spaces.
+
+
+\subsection{Support Kernel Machines}
+
+\textbf{2.2.1.(a) The minimum of the Lagrangian function}
+
+Given L, the Lagrangian function, we could derive to optimize the w:
+
+\begin{equation}
+\frac{\partial L}{\partial w_j} = \frac{1}{2} \frac{\partial (\sum_j d_j
+\norm{w_i}_2)^2}{\partial w_j} - \frac{\partial \alpha_i y_i \sum_j w_j^T
+x_{ji}}{\partial w_j}
+\end{equation}
+
+We can have $\frac{\partial L}{\partial w_j} = 0$. Then we can both times the
+$w_j^T$:
+
+\begin{equation}
+\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2} = \sum_i \alpha_i y_i x_{ji}
+\end{equation}
+
+\begin{equation}
+\norm{w_j}_2 d_j \gamma = w_j^T \sum_i \alpha_i y_i x_{ji}
+\end{equation}
+
+\textbf{2.2.1.(b) Show that $\norm{\sum_i \alpha_i y_i x_{ji}}_2 < d_j \gamma$}
+
+In the last section, we have:
+
+\begin{equation}
+\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2} = \sum_i \alpha_i y_i x_{ji}
+\end{equation}
+
+Therefore, when the w is not 0, we can take the l2-norm of the this two vectors
+and get:
+
+\begin{equation}
+\norm{\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2}}_2
+= \norm{\sum_i \alpha_i y_i x_{ji}}_2
+\end{equation}
+
+Because w is a vector, we know that:
+
+\begin{equation}
+\norm{\frac{w_j}{\norm{w_j}_2}}_2 = 1
+\end{equation}
+
+So we have:
+
+\begin{equation}
+\norm{w_j}_2 d_j \gamma = w_j^T \sum_i \alpha_i y_i x_{ji}
+\end{equation}
+
+\textbf{2.2.1.(c) Show that}
+
+For the first point, from the previous problem, we would know that:
+
+\begin{equation}
+\norm{\sum_i \alpha_i y_i x_{ji}}_2 <= d_j \gamma
+\end{equation}
+
+And we have also proven that, when w is not zero:
+
+\begin{equation}
+\norm{\sum_i \alpha_i y_i x_{ji}}_2 = d_j \gamma
+\end{equation}
+
+Then with the $w_j = 0$, we should have:
+
+\begin{equation}
+\norm{\sum_i \alpha_i y_i x_{ji}}_2 < d_j \gamma
+\end{equation}
+
+For the second point, we would know that:
+
+\begin{equation}
+\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2} = \sum_i \alpha_i y_i x_{ji}
+\end{equation}
+
+\begin{equation}
+w_j = \frac{\norm{w_j}_2}{d_j \gamma} \sum_i \alpha_i y_i x_ji
+\end{equation}
+
+We could know that $\norm{w_j}_2 > 0, d_j>0, \gamma>0$, therefore, we could
+always have a $\eta_i$:
+
+\begin{equation}
+w_j = \eta_j \sum_i \alpha_i y_i x_{ji}, \eta_j > 0
+\end{equation}
+
+When $w_j = 0$, we could set $\eta_j = 0$. Therefore, we always have:
+
+\begin{equation}
+\eta_j >= 0
+\end{equation}
+
+\textbf{2.2.2. Encourage Sparsity}
+From the 2.2.1.(c), we would know that:
+
+\begin{equation}
+if \norm{\sum_i \alpha_i y_i x_{ji}}_2 < d_j \gamma, \quad then \quad w_j = 0
+\end{equation}
+
+We can see that if the result of $y_i x_i \alpha_i$ is smaller than a certain
+number, which is given by the regularization terms, then the parameter $w_j$
+would tend to vanish to minimize the total loss.
+
+\textbf{2.2.3. Kernelized version}
+For the kernelized version, We could derive the graient for the minimal in the
+same way:
+
+\begin{equation}
+\frac{\partial L}{\partial w_j} = \frac{1}{2} \frac{\partial (\sum_j d_j
+\norm{w_i}_2)^2}{\partial w_j} - \frac{\partial \alpha_i y_i \sum_j w_j^T
+\phi (x_{ji})}{\partial w_j}
+\end{equation}
+
+\begin{equation}
+\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2} = \sum_i \alpha_i y_i \phi
+(x_{ji)}
+\end{equation}
+
+\begin{equation}
+w_j = \frac{\norm{w_j}_2}{d_j \gamma} \sum_i \alpha_i y_i \phi (x_ji)
+\end{equation}
+
+Similar with previous problem, we could have:
+
+\begin{equation}
+w_j = \eta_j \sum_i \alpha_i y_i \phi (x_{ji}), \eta_j > 0
+\end{equation}
+
+When $w_j = 0$, we could set $\eta_j = 0$. Therefore, we always have:
+
+\begin{equation}
+\eta_j >= 0
+\end{equation}
+
+
+
+
+
+
+
+
+\section{Collaboration}
+I dicussed with Zheng Chen with problem 1.2 on how to calculate the parameters,
+and he also informed me about 2.2.1(b).
+
+\end{document}
