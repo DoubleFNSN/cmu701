@@ -140,263 +140,46 @@ axis-alighed boxes, then we have $VCdim(h_n) = 2n$
 
 
 
-\section{Support Vector Machines}
+\section{AdaBoost}
 
 
-\subsection{Support Vector Regression}
 
-\textbf{2.1.1. write the dual problem}
+\section{Gaussian Mixture Model}
 
-Suppose we have $\xi_i$ ofr each $x_i$:
 
+\subsection{Show the expectation}
 \begin{equation}
-\abs{f(x) - y} < \epsilon
+E (x) = \int p(x) dx = \sum_k p(x_k) x_k
 \end{equation}
 
 \begin{equation}
-- \epsilon  < w^T x_i - y_i < \epsilon
+\qquad \qquad \qquad \qquad
+= \sum_k \pi_k E_k (x)
 \end{equation}
 
-Let's set:
+We know that for each k, the implict distribution of x is a Gaussian
+distribution, and $E_k (x) = \mu_k$, $\mu_k$ is the mean of the kth guassian
+distribution, so we have:
 
 \begin{equation}
-\abs{w^T x_i - y_i} - \epsilon = \xi_i
-\end{equation}
-
-\begin{equation}
-L = \frac{1}{2} \norm{w}_2^2 + C \sum_{i=1} \xi_i 
-- \sum_i \alpha_i (\epsilon + \xi_i - y_i + w x_i)
-- \sum_i \alpha_i^{\star} (\epsilon + \xi_i +y_i - w x_i)
-- \sum_i \beta_i \xi_i
-\end{equation}
-
-\begin{equation}
-\alpha_i >= 0, \alpha_i^{\star} >= 0, \beta_i >= 0
-\end{equation}
-
-We have to satisfy saddle constraints condition, so
-
-\begin{equation}
-\partial_w L = w - \sum_i (\alpha_i - \alpha_i^{\star}) x_i = 0
-\end{equation}
-
-\begin{equation}
-\partial_{\xi_i} L = C - \alpha_i -\alpha_i^{\star} - \beta_i = 0
-\end{equation}
-
-Take the the conditions back and we can get the form of dual problem of SVR:
-
-\begin{equation}
-maximize: - \frac{1}{2} \sum_{i,j=1} (\alpha_i - \alpha_i^{\star})
-(\alpha_j - \alpha_j^{\star}) x_i^T x_j
-- \epsilon \sum_i (\alpha_i + \alpha_i^{\star})
-+ \sum_i y_i (\alpha_i - \alpha_i^{\star})
-\end{equation}
-
-\begin{equation}
-subject \quad to: \sum_i (\alpha_i - \alpha_i^{\star}) = 0, \qquad
-\alpha_i, \alpha_i^{\star} \in [ 0, C]
+\qquad \qquad
+E (x) = \sum_k \pi_k \mu_k
 \end{equation}
 
 
-\textbf{2.1.2. KKT Conditions}
-
-The KKT condition for this problem is:
-
+\subsection{Show the covariance}
 \begin{equation}
-\partial_w L = w - \sum_i (\alpha_i - \alpha_i^{\star}) x_i = 0
+cov (x) = E (x x^T) - E (x) E(x)^T
 \end{equation}
 
 \begin{equation}
-\partial_{\xi_i} L = C - \alpha_i -\alpha_i^{\star} - \beta_i = 0
+\qquad \qquad \qquad
+= \sum_k \pi_k E_k (x x^T) - E (x) E(x)^T
 \end{equation}
 
 \begin{equation}
-\epsilon + \xi_i - y_i + w^T x_i >= 0
-\end{equation}
-
-\begin{equation}
-\epsilon + \xi_i^{\star} + y_i - w^T x_i >= 0
-\end{equation}
-
-\begin{equation}
-\alpha_i >= 0, \alpha_i^{\star} >= 0, \beta_i >=0
-\end{equation}
-
-\begin{equation}
-\alpha_i (\epsilon + \xi_i - y_i + w^T x_i) = 0
-\end{equation}
-
-\begin{equation}
-\alpha_i^{\star} (\epsilon + \xi_i^{\star} + y_i - w^T x_i) = 0
-\end{equation}
-
-\textbf{2.1.3. Kernelized SVR}
-
-The prediction rule is:
-
-\begin{equation}
-w = \sum_i (\alpha_i - \alpha_i^{\star}) x_i
-\end{equation}
-
-\begin{equation}
-f(x) = \sum_i (\alpha_i - \alpha_i^{\star}) x_i^T x
-\end{equation}
-
-Add we can use kernel to transfer the x, therefore:
-
-\begin{equation}
-f(x_j) = \sum_i (\alpha_i - \alpha_i^{\star}) K(x_i, x_j)
-\end{equation}
-
-\textbf{2.1.4. Why using SVR primal}
-
-
-We are using the primal of SVM and the dual of SVR, this is because we want to
-compose the term:
-
-\begin{equation}
-\sum_i x_i x
-\end{equation}
-
-Therefore, we could use the kernel trick to implicitly transfer the feature of
-the data to other spaces.
-
-
-\subsection{Support Kernel Machines}
-
-\textbf{2.2.1.(a) The minimum of the Lagrangian function}
-
-Given L, the Lagrangian function, we could derive to optimize the w:
-
-\begin{equation}
-\frac{\partial L}{\partial w_j} = \frac{1}{2} \frac{\partial (\sum_j d_j
-\norm{w_i}_2)^2}{\partial w_j} - \frac{\partial \alpha_i y_i \sum_j w_j^T
-x_{ji}}{\partial w_j}
-\end{equation}
-
-We can have $\frac{\partial L}{\partial w_j} = 0$. Then we can both times the
-$w_j^T$:
-
-\begin{equation}
-\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2} = \sum_i \alpha_i y_i x_{ji}
-\end{equation}
-
-\begin{equation}
-\norm{w_j}_2 d_j \gamma = w_j^T \sum_i \alpha_i y_i x_{ji}
-\end{equation}
-
-\textbf{2.2.1.(b) Show that $\norm{\sum_i \alpha_i y_i x_{ji}}_2 < d_j \gamma$}
-
-In the last section, we have:
-
-\begin{equation}
-\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2} = \sum_i \alpha_i y_i x_{ji}
-\end{equation}
-
-Therefore, when the w is not 0, we can take the l2-norm of the this two vectors
-and get:
-
-\begin{equation}
-\norm{\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2}}_2
-= \norm{\sum_i \alpha_i y_i x_{ji}}_2
-\end{equation}
-
-Because w is a vector, we know that:
-
-\begin{equation}
-\norm{\frac{w_j}{\norm{w_j}_2}}_2 = 1
-\end{equation}
-
-So we have:
-
-\begin{equation}
-\norm{w_j}_2 d_j \gamma = w_j^T \sum_i \alpha_i y_i x_{ji}
-\end{equation}
-
-\textbf{2.2.1.(c) Show that}
-
-For the first point, from the previous problem, we would know that:
-
-\begin{equation}
-\norm{\sum_i \alpha_i y_i x_{ji}}_2 <= d_j \gamma
-\end{equation}
-
-And we have also proven that, when w is not zero:
-
-\begin{equation}
-\norm{\sum_i \alpha_i y_i x_{ji}}_2 = d_j \gamma
-\end{equation}
-
-Then with the $w_j = 0$, we should have:
-
-\begin{equation}
-\norm{\sum_i \alpha_i y_i x_{ji}}_2 < d_j \gamma
-\end{equation}
-
-For the second point, we would know that:
-
-\begin{equation}
-\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2} = \sum_i \alpha_i y_i x_{ji}
-\end{equation}
-
-\begin{equation}
-w_j = \frac{\norm{w_j}_2}{d_j \gamma} \sum_i \alpha_i y_i x_ji
-\end{equation}
-
-We could know that $\norm{w_j}_2 > 0, d_j>0, \gamma>0$, therefore, we could
-always have a $\eta_i$:
-
-\begin{equation}
-w_j = \eta_j \sum_i \alpha_i y_i x_{ji}, \eta_j > 0
-\end{equation}
-
-When $w_j = 0$, we could set $\eta_j = 0$. Therefore, we always have:
-
-\begin{equation}
-\eta_j >= 0
-\end{equation}
-
-\textbf{2.2.2. Encourage Sparsity}
-From the 2.2.1.(c), we would know that:
-
-\begin{equation}
-if \norm{\sum_i \alpha_i y_i x_{ji}}_2 < d_j \gamma, \quad then \quad w_j = 0
-\end{equation}
-
-We can see that if the result of $y_i x_i \alpha_i$ is smaller than a certain
-number, which is given by the regularization terms, then the parameter $w_j$
-would tend to vanish to minimize the total loss.
-
-\textbf{2.2.3. Kernelized version}
-For the kernelized version, We could derive the graient for the minimal in the
-same way:
-
-\begin{equation}
-\frac{\partial L}{\partial w_j} = \frac{1}{2} \frac{\partial (\sum_j d_j
-\norm{w_i}_2)^2}{\partial w_j} - \frac{\partial \alpha_i y_i \sum_j w_j^T
-\phi (x_{ji})}{\partial w_j}
-\end{equation}
-
-\begin{equation}
-\frac{w_j d_j \sum_j \norm{w_j}_2 d_j }{\norm{w_j}_2} = \sum_i \alpha_i y_i \phi
-(x_{ji)}
-\end{equation}
-
-\begin{equation}
-w_j = \frac{\norm{w_j}_2}{d_j \gamma} \sum_i \alpha_i y_i \phi (x_ji)
-\end{equation}
-
-Similar with previous problem, we could have:
-
-\begin{equation}
-w_j = \eta_j \sum_i \alpha_i y_i \phi (x_{ji}), \eta_j > 0
-\end{equation}
-
-When $w_j = 0$, we could set $\eta_j = 0$. Therefore, we always have:
-
-\begin{equation}
-\eta_j >= 0
+\qquad \qquad \qquad \qquad
+= \sum_k \pi_k (\Sigma_k + \mu_k \mu_k^T) - E (X) E (x)^T
 \end{equation}
 
 
@@ -405,6 +188,7 @@ When $w_j = 0$, we could set $\eta_j = 0$. Therefore, we always have:
 
 
 
+\section{K-Means}
 
 \section{Collaboration}
 I dicussed with Zheng Chen with problem 1.2 on how to calculate the parameters,
