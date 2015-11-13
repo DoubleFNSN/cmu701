@@ -57,7 +57,7 @@ For n = 2, we could also get $VCdim(h_2) >= 3$, which could be proved using foll
 
 \begin{figure}[!htbp]
 \begin{center}
-\includegraphics[width=60mm]{pic/q11.png}
+\includegraphics[width=80mm]{pic/q11.png}
 \end{center}
 \caption{The representation of $VCdim(h_2)$}
 \end{figure}
@@ -70,7 +70,23 @@ For n = i+1, we could form a matrix of (i+2)*(i+2), since the variable
 x have one more independent dimension. Therefore, $VCdim(h_{i+1}) >= VCdim(h_i) + 1
 >= i+2$.
 
-Therefore, we have $VCdim(h_n) >= n+1$.
+Therefore, we have $VCdim(h_n) >= n+1$. We could use a more straight forward
+detailed example to show that. Say we have n dimensions of the data, then we
+could construct a dataset:
+
+$1th$: \quad (1,0,0,...,0)
+
+$2th$: \quad (0,1,0,...,0)
+
+$ith$: \quad (0,0,...,i..,0)
+
+$nth$: \quad (0,0,0,...,n)
+
+$n+1th$: \quad (0,0,....,0)
+
+For these dataset, we could see that for the ith data point, the ith dimension
+is 1, otherwise 0. And for the n+1th data, all dimension are 0. In this case, we
+could see that the linear classifier could shatter this dataset.
 
 \textbf{(b). Prove $VCdim(h_n) <= n+1$}
 
@@ -142,6 +158,182 @@ axis-alighed boxes, then we have $VCdim(h_n) = 2n$
 
 \section{AdaBoost}
 
+
+\subsection{Justify the Update Rule}
+Based on the defination, if we change the distribution, the previous
+learned hypothesis $h_t$ would be a ``random guess'' to the new distribution of
+data, therefore:
+
+\begin{equation}
+\epsilon_t = err_{D_t} (h_t) = Pr_{x \sim D_t} (y \neq h_t (x)) = \frac{1}{2}
+\end{equation}
+
+The error rate is $\frac{1}{2}$ for a random guess with margin $\gamma_t$ = 0.
+Then we would have, for all i:
+
+\begin{equation}
+\alpha_t = \frac{1}{2} log (\frac{1 - \epsilon_t}{\epsilon_t}) = 0
+\end{equation}
+
+\begin{equation}
+D_{t+1} (i) = \frac{D_t (i)}{Z_t} e^{ -\alpha_t y_i h_t (x_i) }
+\end{equation}
+
+\begin{equation}
+= \frac{D_t (i)}{Z_t}
+\end{equation}
+
+Therefore, we could see that the $D_{t+1} = D_t$, so:
+
+\begin{equation}
+err_{D_{t+1}} (h_t)= Pr_{x \sim D_t} (y \neq h_t (x))
+\end{equation}
+
+\begin{equation}
+\qquad \qquad
+= \sum_{y_i \neq h_t (x_i)} D_{t+1} (i)
+\end{equation}
+
+\begin{equation}
+\qquad \quad
+= \sum_{y_i \neq h_t (x_i)} D_t (i)
+\end{equation}
+
+\begin{equation}
+\qquad
+= err_{D_t} = \frac{1}{2}
+\end{equation}
+
+
+\subsection{Show the $D_{t+1} (i)$}
+\begin{equation}
+D_{t+1} (i) = \frac{D_t (i)}{Z_t} e^{ -\alpha_t y_i h_t (x_i) }
+\end{equation}
+
+\begin{equation}
+\quad \qquad \quad
+= \frac{e^{-y_i}}{Z_t} e^{\alpha_t h_t (x_i)} D_t (i)
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \qquad \qquad \qquad \quad
+= \frac{e^{-y_i}}{Z_t} e^{\alpha_t h_t (x_i)} \cdot
+\frac{e^{-y_i}}{Z_{t-1}} e^{\alpha_{t-1} h_{t-1} (x_i)} D_{t-2} (i)
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \qquad
+= \frac{e^{-y_i}}{Z_t} e^{\alpha_t h_t (x_i)} \cdot \cdot \cdot
+\frac{1}{m} e^{\alpha_1 h_1 (x_i)}
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \quad
+= (m \prod_t Z_t)^{-1} e^{-y_i \sum_t \alpha_t h_t (x)}
+\end{equation}
+
+
+\subsection{Show the error upperbound}
+\begin{equation}
+err_S (H)= Pr (y \neq H (x)) =
+\frac{1}{m} \sum_{H(i) \neq y_i} D_S (i)
+\end{equation}
+
+When $H(i) \neq y_i$, we have $y_i f(x_i) < 0$, and $exp(-y_i f(x_i)) > 0$,
+therefore:
+
+\begin{equation}
+err_S (H) <
+\frac{1}{m} \sum_i exp(-y_i f(x_i))
+\end{equation}
+
+For the right term, according to the defination of Z and W, we have:
+\begin{equation}
+w_{t,i} exp(-\alpha_t y_i h_t (x_i)) = Z_m w_{t+1,i}
+\end{equation}
+
+\begin{equation}
+\frac{1}{m} \sum_i exp(-y_i f(x_i))
+= \frac{1}{m} \sum_i exp (-\sum_t \alpha_t y_i h_t (x_i))
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \qquad \qquad
+= \sum_{1,i} w_{1,i} \prod_t exp(-\alpha_t y_i h_t (x_i))
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \qquad \qquad \quad
+= Z_1 \sum_{2,i} w_{2,i} \prod_{t=2}^T exp(-\alpha_t y_i h_t (x_i))
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \qquad \qquad \qquad
+= Z_1 Z_2 \sum_{3,i} w_{3,i} \prod_{t=3}^T exp(-\alpha_t y_i h_t (x_i))
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \qquad \qquad \qquad
+= Z_1 Z_2 \cdot \cdot \cdot \sum_i w_{T,i} exp(\alpha_T y_i H(x_i))
+\end{equation}
+
+\begin{equation}
+= \prod_t Z_t
+\end{equation}
+
+Therefore, we have:
+
+\begin{equation}
+err_S (H) < \frac{1}{m} \sum_i exp(-y_i f(x_i)) = \prod_t Z_t
+\end{equation}
+
+
+\subsection{Show the $\prod_t Z_t$ upperbound}
+\begin{equation}
+Z_t = \sum_i exp(-\alpha_t y_i h_t (x_i))
+\end{equation}
+
+\begin{equation}
+\qquad \qquad \qquad \quad
+= \sum_{h_t (x_i) = y_i} w_i e^{-\alpha_t}
++ \sum_{h_t (x_i) \neq y_i} w_i e^{\alpha_t}
+\end{equation}
+
+\begin{equation}
+\quad
+= (1 - \epsilon_t) e^{-\alpha_t} + \epsilon e^{\alpha_t}
+\end{equation}
+
+\begin{equation}
+\qquad \qquad
+= 2 \sqrt{\epsilon_t (1-\epsilon_t)}
+= \sqrt{1 - 4 \gamma_t^2}
+\end{equation}
+
+Therefore, we could use Taylor expansion series to get $\sqrt{1 - 4 \gamma_t^2}$
+$<= exp(-2 \gamma_t^2)$, so we have:
+
+\begin{equation}
+\prod_t Z_t <= e^{-2 \sum_t \gamma_t^2}
+\end{equation}
+
+
+\subsection{Express big-O notation of T}
+From above questions, we could get:
+
+\begin{equation}
+\epsilon <= e^{-2 \sum_t \gamma_t^2}
+\end{equation}
+
+With the smallest margin of $\gamma$, we could transfer to
+
+\begin{equation}
+\epsilon <= e^{-2 T \gamma^2}
+\end{equation}
+
+\begin{equation}
+T = O (\frac{-log (\epsilon)}{\gamma^2})
+\end{equation}
 
 
 \section{Gaussian Mixture Model}
