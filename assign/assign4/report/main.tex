@@ -336,6 +336,63 @@ T = O (\frac{-log (\epsilon)}{\gamma^2})
 \end{equation}
 
 
+\subsection{implementation}
+For each h, we choose the classifier with smallest error in each
+iteration. The result is:
+
+\begin{table}[h]
+\renewcommand{\arraystretch}{1.5}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+$ t $ 
+& $ \epsilon_t $ 
+& $ \alpha_t $ 
+& $ D_t(1) $ 
+& $ D_t(2) $ 
+& $ D_t(3) $
+& $ D_t(4) $
+& $ D_t(5) $
+& $ D_t(6) $
+& $ D_t(7) $
+& $ D_t(8) $
+& $ D_t(9) $ 
+& $ err_S(H) $ \\
+\hline 
+1 &0.222 &0.626 &0.11 &0.11 &0.11 &0.11 &0.11
+&0.11 &0.11 &0.11 &0.11 &0.222 \\
+\hline 
+2 &0.143 &0.896 &0.071 &0.071 &0.071 &0.071 &0.071
+&0.071 &0.071 &0.25 &0.25 &0.222 \\
+\hline 
+3 &0.125 &0.973 &0.042 &0.042 &0.042 &0.042 &0.25
+&0.25 &0.042 &0.146 &0.146 &0 \\
+\hline 
+\end{tabular}
+\caption{AdaBoost results}
+\label{tbl:boost}
+\end{table}
+
+The classfication rule: first, if $x > 2.5$, pos; second, if $x > 3.5$,
+pos; third, if $x < 4.5$, pos.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Gaussian Mixture Model}
 
 
