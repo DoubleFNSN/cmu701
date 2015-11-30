@@ -29,7 +29,6 @@ AndrewId: jingyual\\
 \newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
 \newcommand{\inner}[1]{\left\langle #1 \right\rangle}
 
-
 \nipsfinalcopy % Uncomment for camera-ready version
 
 
@@ -38,287 +37,137 @@ AndrewId: jingyual\\
 
 
 
-\section{VC dimension}
+\section{Gaussian Graphical Model}
 
 
-\subsection{Show the VC dimension of linear classifier}
-To prove that the linear classifier h with x in $ R^n $ has the VC dimension of
-n + 1, we need to prove that $VCdim(h_n) >= n + 1$, and then prove that
-$VCdim(h_n) <= n + 1$.
-
-\textbf{(a). Prove $VCdim(h_n) >= n+1$}
-
-First of all, we could use the Mathematical Induction to prove that $VCdim(H) >=
-n+1$:
-
-For n = 1, it is easy to get $VCdim(h_1) >= 2$
-
-For n = 2, we could also get $VCdim(h_2) >= 3$, which could be proved using following figures:
-
-\begin{figure}[!htbp]
-\begin{center}
-\includegraphics[width=80mm]{pic/q11.png}
-\end{center}
-\caption{The representation of $VCdim(h_2)$}
-\end{figure}
-
-For n = i, we assume that the $VCdim(h_i) >= i+1$. We could form a matrix of
-(i+1)*(i+1),
-with the rank of i+1, since the VCdim is i+1.
-
-For n = i+1, we could form a matrix of (i+2)*(i+2), since the variable
-x have one more independent dimension. Therefore, $VCdim(h_{i+1}) >= VCdim(h_i) + 1
->= i+2$.
-
-Therefore, we have $VCdim(h_n) >= n+1$. We could use a more straight forward
-detailed example to show that. Say we have n dimensions of the data, then we
-could construct a dataset:
-
-$1th$: \quad (1,0,0,...,0)
-
-$2th$: \quad (0,1,0,...,0)
-
-$ith$: \quad (0,0,...,i..,0)
-
-$nth$: \quad (0,0,0,...,n)
-
-$n+1th$: \quad (0,0,....,0)
-
-For these dataset, we could see that for the ith data point, the ith dimension
-is 1, otherwise 0. And for the n+1th data, all dimension are 0. In this case, we
-could see that the linear classifier could shatter this dataset.
-
-\textbf{(b). Prove $VCdim(h_n) <= n+1$}
-
-Then we should prove that $VCdim(h_n) <= n+1$:
-
-Suppose we could shatter n+2 points, then using the convex combinations of
-points in C, we could seperate points into S1 and S2, that:
+\subsection{Derive $\phi_{ij} (x_i, x_j)$ and $\phi_i (x_i)$}
+%\begin{figure}[!htbp]
+%\begin{center}
+%\includegraphics[width=80mm]{pic/q11.png}
+%\end{center}
+%\caption{The representation of $VCdim(h_2)$}
+%\end{figure}
 
 \begin{equation}
-conv(s1) \cap conv(s2) \neq \emptyset
-\end{equation}
-
-However, if $VCdim(h_n) = n+2$, then we could spilt points to half space
-contains s1 and the complement of the half space contains s2. This implies that
-the both half space contains the convex hull of s1 and the complement of the
-half space the contains the convex hull of s2. Thus, we get:
-
-\begin{equation}
-conv(s1) \cap conv(s2) = \emptyset
-\end{equation}
-
-These two observations are contradictory to each other. So we know that for the
-n+2 points here, we could not use the linear classifier to shatter all of them.
-
-\textbf{In conclusion}, we prove that $VCdim(h_n) >= n+1$ and $VCdim(h_n) <= n+1$ for the
-linear classifier, then we have $VCdim(h_n) = n+1$
-
-
-\subsection{Show the VC dimension of axis-aligned boxes}
-
-Similarily, for this case, to prove that the axis-aligned boxes classifier h
-with x in $ R^n $ has the VC dimension of 2n, we need to prove that
-$VCdim(h_n) >= 2n$, and then prove that $VCdim(h_n) <= 2n$.
-
-\textbf{(a). Prove $VCdim(h_n) >= 2n$}
-
-First of all, we need to prove that for any case, $VCdim(h_n) >= 2n$, which
-means if the x has n dimensions, we can use the axis-aligned boxes classifiers
-to shatter 2n points.
-
-Suppose we have n dimensions, then we can map all the x to a dimension i. In the
-dimension i, we can have $x^i_{max}$ and $x^i_{min}$. Therefore, in this
-dimension i, we could always shatter at least 2 points via a split between the
-$x^i_{max}$ and $x^i_{min}$.
-
-Considering we have n dimensions, and the mapping of each dimension of the data is
-independent to the mapping of other dimension of the data. Therefore, we could
-at least shatter 2*n points via the axias-alighed boxes. Therefore, we have
-$VCdim(h_n) >= 2n$.
-
-\textbf{(b). Prove $VCdim(h_n) <= 2n$}
-
-Then we need to prove that $VCdim(h_n) <= 2n$. Suppose we have 2n + 1 points, we
-could always find the 2n ``boundries'', which is the min value and max value for
-each dimension, and form an ``area''. Then the 2n+1th points will be guaranteed to
-appear within the selected ``area''.
-
-For any 2n+1 points, we could always transfer to the above mentioned scenario. In
-this scenario, we could not classify the 2n+1th point, because it is contained
-within the ``area'', and no rules are guaranteed to rightly classify it.
-
-Therefore, by mapping the data to each dimension and form an ``area'', we could
-prove that $VCdim(h_n) <= 2n$.
-
-\textbf{In conclusion}, we prove that $VCdim(h_n) >= 2n$ and $VCdim(h_n) <= 2n$ for the
-axis-alighed boxes, then we have $VCdim(h_n) = 2n$
-
-
-
-\section{AdaBoost}
-
-
-\subsection{Justify the Update Rule}
-Based on the defination, if we change the distribution, the previous
-learned hypothesis $h_t$ would be a ``random guess'' to the new distribution of
-data, therefore:
-
-\begin{equation}
-\epsilon_t = err_{D_t} (h_t) = Pr_{x \sim D_t} (y \neq h_t (x)) = \frac{1}{2}
-\end{equation}
-
-The error rate is $\frac{1}{2}$ for a random guess with margin $\gamma_t$ = 0.
-Then we would have, for all i:
-
-\begin{equation}
-\alpha_t = \frac{1}{2} log (\frac{1 - \epsilon_t}{\epsilon_t}) = 0
+P(X \mid \mu, \Sigma) = \frac{1}{\sqrt{(2\pi)^n \Sigma}}
+exp (-\frac{1}{2} (x-\mu)^T \Sigma^{-1} (x-\mu))
 \end{equation}
 
 \begin{equation}
-D_{t+1} (i) = \frac{D_t (i)}{Z_t} e^{ -\alpha_t y_i h_t (x_i) }
+P(X \mid \mu, \Omega) \propto exp (-\frac{1}{2} X^T \Omega X + (\Omega \mu)^T X)
 \end{equation}
 
 \begin{equation}
-= \frac{D_t (i)}{Z_t}
-\end{equation}
-
-Therefore, we could see that the $D_{t+1} = D_t$, so:
-
-\begin{equation}
-err_{D_{t+1}} (h_t)= Pr_{x \sim D_t} (y \neq h_t (x))
+\qquad \qquad =
+\prod_{i \in V} exp (-\frac{1}{2} x_i^T \Omega_{ii} x_i + (\Omega \mu)_i^T x_i)
+\prod_{(i, j) \in E} exp( -\frac{1}{2} x_i^T \Omega_{ij} x_j)
 \end{equation}
 
 \begin{equation}
-\qquad \qquad
-= \sum_{y_i \neq h_t (x_i)} D_{t+1} (i)
+\psi_{ij} (x_i, x_j) =
+exp( -\frac{1}{2} x_i^T \Omega_{ij} x_j)
+, \quad
+\psi_{i} (x_i) =
+exp (-\frac{1}{2} x_i^T \Omega_{ii} x_i + (\Omega \mu)_i^T x_i)
+\end{equation}
+
+
+\subsection{Prove $(i,j ) \notin E \iff X_i \perp X_j | X_{V\backslash\{i,j\}}$}
+If $(i, j) \notin E$, there is no edge between node i
+and node j, then we can get:
+
+\begin{equation}
+\Omega_{ij} = 0, \qquad \psi_{ij} (x_i, x_j) = 1
 \end{equation}
 
 \begin{equation}
-\qquad \quad
-= \sum_{y_i \neq h_t (x_i)} D_t (i)
+P (x_i, x_j \mid V\backslash\{i,j\}, \mu, \Omega) = \psi_{ij}' (x_i, x_j)
+= \psi_{ij} (x_i, x_j) \cdot \psi_i (x_i)^{\frac{1}{n(i)}}
+\cdot \psi_j (x_j)^{\frac{1}{n(j)}}
 \end{equation}
 
 \begin{equation}
-\qquad
-= err_{D_t} = \frac{1}{2}
-\end{equation}
-
-
-\subsection{Show the $D_{t+1} (i)$}
-\begin{equation}
-D_{t+1} (i) = \frac{D_t (i)}{Z_t} e^{ -\alpha_t y_i h_t (x_i) }
+\qquad \qquad=
+\psi_i (x_i)^{\frac{1}{n(i)}}
+\cdot \psi_j (x_j)^{\frac{1}{n(j)}}
 \end{equation}
 
 \begin{equation}
-\quad \qquad \quad
-= \frac{e^{-y_i}}{Z_t} e^{\alpha_t h_t (x_i)} D_t (i)
+\qquad \qquad =
+P (x_i\mid V\backslash\{i\}, \mu, \Omega)
+\cdot P (x_j\mid V\backslash\{j\}, \mu, \Omega)
 \end{equation}
 
 \begin{equation}
-\qquad \qquad \qquad \qquad \qquad \qquad \quad
-= \frac{e^{-y_i}}{Z_t} e^{\alpha_t h_t (x_i)} \cdot
-\frac{e^{-y_i}}{Z_{t-1}} e^{\alpha_{t-1} h_{t-1} (x_i)} D_{t-2} (i)
+\qquad \qquad \qquad =
+P (x_i\mid V\backslash\{i,j\}, \mu, \Omega)
+\cdot P (x_j\mid V\backslash\{i,j\}, \mu, \Omega)
+\end{equation}
+
+We can notice the above process could be inverse, which means if we know that
+the two points are independent, we could get that there is no edge between these
+two nodes. Therefore, we could prove the conclusion.
+
+
+
+\section{Sampling}
+
+
+\subsection{Inverse Sampling}
+\textbf{2.1.1 Prove Inverse Sampling}
+
+First, for y' $\in$ R, we have:
+
+\begin{equation}
+P (h^{-1} (z) <= y') = P (inf {y: h(y) = z} < y')
 \end{equation}
 
 \begin{equation}
-\qquad \qquad \qquad \qquad
-= \frac{e^{-y_i}}{Z_t} e^{\alpha_t h_t (x_i)} \cdot \cdot \cdot
-\frac{1}{m} e^{\alpha_1 h_1 (x_i)}
+\qquad =
+P (z <= h(y')) = h (y')
+\end{equation}
+
+Second, for $0 < z'< 1$, we have:
+
+\begin{equation}
+P(h(y) < z') = P(y < h^{-1} (z')) = z'
+\end{equation}
+
+Therefor, we could prove that inverse sampling is reasonable. The drawback
+could be:
+
+(1) In real application, it would require a closed form expression for F(x),
+which means we would need do normalization sometimes.
+
+(2) In real application, we need to konw the p(y) to do sampling.
+
+\textbf{2.1.2 Find the Cauchy distribution transfermation}
+
+Given the density function, we could derive:
+
+\begin{equation}
+h (y) = \int_{-\infty}^y p(y') dy' = \frac{1}{2} + \frac{1}{\pi} arctan(y)
 \end{equation}
 
 \begin{equation}
-\qquad \qquad \qquad \quad
-= (m \prod_t Z_t)^{-1} e^{-y_i \sum_t \alpha_t h_t (x)}
+y = g (z) = h^{-1} (z) = tan(\pi (z - \frac{1}{2}))
 \end{equation}
 
 
-\subsection{Show the error upperbound}
-\begin{equation}
-err_S (H)= Pr (y \neq H (x)) =
-\frac{1}{m} \sum_{H(i) \neq y_i} D_S (i)
-\end{equation}
-
-When $H(i) \neq y_i$, we have $y_i f(x_i) < 0$, and $exp(-y_i f(x_i)) > 0$,
-therefore:
-
-\begin{equation}
-err_S (H) <
-\frac{1}{m} \sum_i exp(-y_i f(x_i))
-\end{equation}
-
-For the right term, according to the defination of Z and W, we have:
-\begin{equation}
-w_{t,i} exp(-\alpha_t y_i h_t (x_i)) = Z_m w_{t+1,i}
-\end{equation}
-
-\begin{equation}
-\frac{1}{m} \sum_i exp(-y_i f(x_i))
-= \frac{1}{m} \sum_i exp (-\sum_t \alpha_t y_i h_t (x_i))
-\end{equation}
-
-\begin{equation}
-\qquad \qquad \qquad \qquad \qquad
-= \sum_{1,i} w_{1,i} \prod_t exp(-\alpha_t y_i h_t (x_i))
-\end{equation}
-
-\begin{equation}
-\qquad \qquad \qquad \qquad \qquad \quad
-= Z_1 \sum_{2,i} w_{2,i} \prod_{t=2}^T exp(-\alpha_t y_i h_t (x_i))
-\end{equation}
-
-\begin{equation}
-\qquad \qquad \qquad \qquad \qquad \qquad
-= Z_1 Z_2 \sum_{3,i} w_{3,i} \prod_{t=3}^T exp(-\alpha_t y_i h_t (x_i))
-\end{equation}
-
-\begin{equation}
-\qquad \qquad \qquad \qquad \qquad \qquad
-= Z_1 Z_2 \cdot \cdot \cdot \sum_i w_{T,i} exp(\alpha_T y_i H(x_i))
-\end{equation}
-
-\begin{equation}
-= \prod_t Z_t
-\end{equation}
-
-Therefore, we have:
-
-\begin{equation}
-err_S (H) < \frac{1}{m} \sum_i exp(-y_i f(x_i)) = \prod_t Z_t
-\end{equation}
+\subsection{Rejection Sampling}
 
 
-\subsection{Show the $\prod_t Z_t$ upperbound}
-\begin{equation}
-Z_t = \sum_i exp(-\alpha_t y_i h_t (x_i))
-\end{equation}
-
-\begin{equation}
-\qquad \qquad \qquad \quad
-= \sum_{h_t (x_i) = y_i} w_i e^{-\alpha_t}
-+ \sum_{h_t (x_i) \neq y_i} w_i e^{\alpha_t}
-\end{equation}
-
-\begin{equation}
-\quad
-= (1 - \epsilon_t) e^{-\alpha_t} + \epsilon e^{\alpha_t}
-\end{equation}
-
-\begin{equation}
-\qquad \qquad
-= 2 \sqrt{\epsilon_t (1-\epsilon_t)}
-= \sqrt{1 - 4 \gamma_t^2}
-\end{equation}
-
-Therefore, we could use Taylor expansion series to get $\sqrt{1 - 4 \gamma_t^2}$
-$<= exp(-2 \gamma_t^2)$, so we have:
-
-\begin{equation}
-\prod_t Z_t <= e^{-2 \sum_t \gamma_t^2}
-\end{equation}
 
 
-\subsection{Express big-O notation of T}
+
+
+
+
+
+
+
+
+\subsection{Markov Chain Monte Carlo}
 From above questions, we could get:
 
 \begin{equation}
